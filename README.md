@@ -1,4 +1,6 @@
 # Golang Thread Pool
+[![GoDoc](https://godoc.org/github.com/jjjjyx/threadpool?status.svg)](https://godoc.org/github.com/jjjjyx/threadpool)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jjjjyx/threadpool)](https://goreportcard.com/report/github.com/jjjjyx/threadpool)
 
 [![My Skills](https://skillicons.dev/icons?i=go,github,idea)](https://skillicons.dev)
 
