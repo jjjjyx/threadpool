@@ -61,12 +61,9 @@ func (t *TestTaskFuture) Call(ctx context.Context) interface{} {
 
 }
 
-var (
-	threadPool *ThreadPool
-)
-
 func TestNewThreadPool(t *testing.T) {
-	threadPool = NewThreadPool("test", 3, 3*100)
+	threadPool := NewThreadPool("test", 3, 3*100)
+	fmt.Println(threadPool)
 }
 
 func TestNewThreadPool_Execute(t *testing.T) {

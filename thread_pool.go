@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
-	"sync"
 )
 
 type ThreadPool struct {
-	taskQueryLock sync.Mutex
-	coreSize      int
-	bufferSize    int
-	channel       chan callableTask
-	name          string
+	coreSize   int
+	bufferSize int
+	channel    chan callableTask
+	name       string
 }
 
 func (t *ThreadPool) start() {
@@ -28,6 +26,17 @@ func (t *ThreadPool) start() {
 	}
 }
 
+// Shutdown 与close 的区别在于 停止后是否要中断channel缓冲区的任务
+func (t *ThreadPool) Shutdown() {
+	if !t.channelIsOpen() {
+		return
+	}
+
+	close(t.channel)
+	t.channel = nil
+}
+
+// Stop 停止线程池，不在接受任务，已开始的任务不处理，已在缓冲区的任务取消
 func (t *ThreadPool) Stop() {
 	if !t.channelIsOpen() {
 		return
@@ -94,12 +103,6 @@ func (t *ThreadPool) worker(threadId int) {
 	}
 
 	for info := range t.channel {
-
-		if info.before != nil {
-			if !info.before() {
-				continue
-			}
-		}
 		worker(info)
 	}
 
