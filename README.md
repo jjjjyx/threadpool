@@ -1,5 +1,7 @@
 # Golang Thread Pool
 
+[![My Skills](https://skillicons.dev/icons?i=go,github,idea)](https://skillicons.dev)
+
 主要特性：
 
 * 支持 `Callable` 和 `Runnable`，支持 `Future` 或任务执行结果
