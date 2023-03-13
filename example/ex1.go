@@ -3,7 +3,7 @@ package example
 import (
 	"context"
 	"fmt"
-	"threadpool"
+	"github.com/jjjjyx/threadpool"
 	"time"
 )
 

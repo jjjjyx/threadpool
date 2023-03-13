@@ -34,30 +34,24 @@ type callableTask struct {
 	ctx      context.Context
 	cancel   context.CancelFunc
 	response chan<- interface{}
-	handle   *Future
+	future   *Future
 }
 
-//type taskQueueCallable
-
-//type taskStatus int
-const (
-	taskStatusQueue   = iota // 队列中
-	taskStatusRunning        // 运行中
-	taskStatusEnd            // 结束
-
-)
-
-// Future is the handle returned after submitting a callable task to the thread ThreadPool
+// Future is the future returned after submitting a callable task to the thread ThreadPool
 type Future struct {
 	response <-chan interface{}
 	done     bool
 	err      error
 	cancel   context.CancelFunc
+	ctx      context.Context
+}
+
+func (f *Future) GetTaskContext() context.Context {
+	return f.ctx
 }
 
 // Get returns the response of the Callable task when done
 // the blocking call it waits for the execution to complete
-
 func (f *Future) Get() (interface{}, error) {
 
 	if f.err != nil {

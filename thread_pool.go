@@ -79,9 +79,9 @@ func (t *ThreadPool) worker(threadId int) {
 				message := fmt.Sprintf("pool[%s][thread-%d]\nstacktrace from panic: %s: %s\n", t.name, threadId, re, string(debug.Stack()))
 				_, _ = fmt.Fprintln(os.Stderr, message)
 				if err, ok := re.(error); ok {
-					info.handle.err = err
+					info.future.err = err
 				}
-				info.handle.done = true
+				info.future.done = true
 			}
 
 			info.cancel()
@@ -90,7 +90,7 @@ func (t *ThreadPool) worker(threadId int) {
 
 		ctx := info.ctx
 		result := info.Call(ctx)
-		info.handle.done = true
+		info.future.done = true
 
 		select {
 		case <-ctx.Done():
@@ -124,10 +124,10 @@ func (t *ThreadPool) submitWithResult(task Callable) (callableTask, *Future) {
 	// 需要一个缓冲区，防止 worker 阻塞
 	response := make(chan interface{}, 1)
 
-	future := &Future{response: response, cancel: cancel}
+	future := &Future{response: response, cancel: cancel, ctx: ctx}
 	futureTask := callableTask{
 		Callable: task,
-		handle:   future,
+		future:   future,
 		ctx:      ctx,
 		cancel:   cancel,
 		response: response,
