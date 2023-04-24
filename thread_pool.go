@@ -85,7 +85,7 @@ func (t *ThreadPool) worker(threadId int) {
 			}
 
 			info.cancel()
-
+			close(info.response)
 		}()
 
 		ctx := info.ctx
@@ -97,7 +97,6 @@ func (t *ThreadPool) worker(threadId int) {
 			// 先被结束了，close 掉 不返回结果
 		default:
 			info.response <- result
-			close(info.response)
 		}
 
 	}
